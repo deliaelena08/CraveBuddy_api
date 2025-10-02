@@ -1,0 +1,16 @@
+services:
+  postgres:
+    container_name: cravebuddy-db
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Delia.08
+      POSTGRES_DB: CraveBuddy
+    volumes:
+      - db:/data/postgres
+    ports:
+      - "5432:5432"
+    restart: always
+
+volumes:
+  db:
