@@ -30,4 +30,7 @@ public class User {
 
     @Column(name = "location")
     private String location;
+
+    @Column(name = "icon")
+    private String icon;
 }

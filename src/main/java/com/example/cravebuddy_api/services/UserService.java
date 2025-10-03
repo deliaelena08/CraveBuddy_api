@@ -53,4 +53,26 @@ public class UserService {
         return userMapper.entityToDto(userRepository.findAll());
     }
 
+    public UserDto updateUser(Long id, UserDto updatedUserDto) {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException("User with id " + id + " not found"));
+
+        if (!existingUser.getUsername().equals(updatedUserDto.getUsername())
+                && userRepository.existsByUsername(updatedUserDto.getUsername())) {
+            throw new UserAlreadyExistException();
+        }
+
+        existingUser.setUsername(updatedUserDto.getUsername());
+        existingUser.setLanguage(updatedUserDto.getLanguage());
+        existingUser.setLocation(updatedUserDto.getLocation());
+        existingUser.setIcon(updatedUserDto.getIcon());
+
+        String errors = userValidator.validateUpdate(existingUser);
+        if (!errors.isEmpty()) {
+            throw new IllegalArgumentException(errors);
+        }
+
+        return userMapper.entityToDto(userRepository.save(existingUser));
+    }
+
 }

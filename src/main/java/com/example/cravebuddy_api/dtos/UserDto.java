@@ -12,4 +12,5 @@ public class UserDto {
     private UserRole role;
     private Language language;
     private String location;
+    private String icon;
 }

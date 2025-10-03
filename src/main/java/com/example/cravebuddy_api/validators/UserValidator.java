@@ -17,6 +17,14 @@ public class UserValidator {
         return "";
     }
 
+    public String validateUpdate(User user) {
+        StringBuilder errors = new StringBuilder();
+        errors
+                .append(validateUsername(user))
+                .append(validateLocation(user));
+        return errors.toString();
+    }
+
     private String validateUsername(User user) {
         if(user.getUsername() == null || user.getUsername().isEmpty()){
             return "Username is empty";
