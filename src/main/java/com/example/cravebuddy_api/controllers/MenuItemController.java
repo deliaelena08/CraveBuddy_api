@@ -4,7 +4,6 @@ import com.example.cravebuddy_api.dtos.MenuItemDto;
 import com.example.cravebuddy_api.exceptions.menuitem.InvalidMenuItemException;
 import com.example.cravebuddy_api.exceptions.menuitem.MenuItemAlreadyExistException;
 import com.example.cravebuddy_api.exceptions.menuitem.MenuItemNotFoundException;
-import com.example.cravebuddy_api.exceptions.user.UserNotFoundException;
 import com.example.cravebuddy_api.services.MenuItemService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

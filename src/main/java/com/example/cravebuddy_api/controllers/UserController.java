@@ -40,7 +40,7 @@ public class UserController {
     @PostMapping()
     public ResponseEntity<?> saveUser(@RequestBody UserDto user){
         try {
-            return ResponseEntity.ok(userService.register(user));
+            return ResponseEntity.ok(userService.saveUser(user));
         }catch (InvalidUserException | UserAlreadyExistException e){
             return ResponseEntity
                     .badRequest()
