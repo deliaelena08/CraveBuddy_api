@@ -48,4 +48,8 @@ public class MenuItemService {
     public List<MenuItemDto> findAllMenuItems() {
         return menuItemMapper.entityToDto(menuItemRepository.findAll());
     }
+
+    public List<MenuItemDto> findMenuItemsByBakery(Long bakeryId) {
+        return menuItemMapper.entityToDto(menuItemRepository.findByBakeryId(bakeryId));
+    }
 }
