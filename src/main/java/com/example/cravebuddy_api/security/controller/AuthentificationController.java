@@ -38,12 +38,18 @@ public class AuthentificationController {
         }
 
         String jwt = jwtTokenService.createJwtToken(user.getId(), user.getUsername());
-        Cookie cookie = new Cookie("auth-cookie",jwt);
+
+       Cookie cookie = new Cookie("auth-cookie",jwt);
         cookie.setPath("/");
         cookie.setDomain("localhost");
         cookie.setHttpOnly(false);
         response.addCookie(cookie);
-        return ResponseEntity.ok(Map.of("token", jwt));
+
+        return ResponseEntity.ok(Map.of(
+                "token", jwt,
+                "id", user.getId(),
+                "username", user.getUsername()
+        ));
     }
 
     @PostMapping("/signup")

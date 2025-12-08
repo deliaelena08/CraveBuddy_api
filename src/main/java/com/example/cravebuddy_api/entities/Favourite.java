@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @Entity
-@Table(name = "feedbacks")
+@Table(name = "favourites")
 public class Favourite {
     @Id
     @Column
