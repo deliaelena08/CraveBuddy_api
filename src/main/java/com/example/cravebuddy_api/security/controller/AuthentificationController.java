@@ -48,7 +48,8 @@ public class AuthentificationController {
         return ResponseEntity.ok(Map.of(
                 "token", jwt,
                 "id", user.getId(),
-                "username", user.getUsername()
+                "username", user.getUsername(),
+                "language", user.getLanguage()
         ));
     }
 
