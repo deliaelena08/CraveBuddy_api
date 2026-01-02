@@ -42,4 +42,20 @@ public class NotificationController {
         notificationRepository.save(notification);
         return ResponseEntity.ok().build();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteNotification(@PathVariable Long id) {
+        if (notificationRepository.existsById(id)) {
+            notificationRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @DeleteMapping("/user/{userId}")
+    public ResponseEntity<?> deleteAllUserNotifications(@PathVariable Long userId) {
+        notificationRepository.deleteByUserId(userId);
+        return ResponseEntity.ok().build();
+    }
 }

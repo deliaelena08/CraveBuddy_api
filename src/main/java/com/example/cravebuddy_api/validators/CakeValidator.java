@@ -8,8 +8,8 @@ public class CakeValidator {
     public String validate(Cake cake) {
         StringBuilder errors = new StringBuilder();
         errors
-                .append(validateName(cake))
-                .append(validateIngredients(cake))
+                .append(validateNameRo(cake))
+                .append(validateIngredientsRo(cake))
                 .append(validateSweetness(cake));
         if(!errors.isEmpty()){
             return errors.toString();
@@ -17,16 +17,16 @@ public class CakeValidator {
         return "";
     }
 
-    private String validateName(Cake cake) {
-        if(cake.getName() == null){
-            return "Name is required";
+    private String validateNameRo(Cake cake) {
+        if(cake.getNameRo() == null || cake.getNameRo().trim().isEmpty()){
+            return "Romanian Name is required; ";
         }
         return "";
     }
 
-    private String validateIngredients(Cake cake) {
-        if(cake.getIngredients() == null){
-            return "Ingredients is required";
+    private String validateIngredientsRo(Cake cake) {
+        if(cake.getIngredientsRo() == null || cake.getIngredientsRo().trim().isEmpty()){
+            return "Romanian Ingredients are required; ";
         }
         return "";
     }
@@ -34,7 +34,7 @@ public class CakeValidator {
     private String validateSweetness(Cake cake) {
         if(cake.getSweetness() != null) {
             if (cake.getSweetness() < 0 || cake.getSweetness() > 10) {
-                return "Sweetness must be between 0 and 10";
+                return "Sweetness must be between 0 and 10; ";
             }
         }
         return "";

@@ -12,21 +12,36 @@ public class Cake {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "name_ro")
+    private String nameRo;
 
-    @Column(name="ingredients")
-    private String ingredients;
+    @Column(name="ingredients_ro")
+    private String ingredientsRo;
 
-    @Column(name = "texture")
-    private String texture;
+    @Column(name = "texture_ro")
+    private String textureRo;
 
-    @Column(name = "flavour")
-    private String flavour;
+    @Column(name = "flavour_ro")
+    private String flavourRo;
+
+    @Column(name = "provenience_ro")
+    private String provenienceRo;
+
+    @Column(name = "name_en")
+    private String nameEn;
+
+    @Column(name="ingredients_en")
+    private String ingredientsEn;
+
+    @Column(name = "texture_en")
+    private String textureEn;
+
+    @Column(name = "flavour_en")
+    private String flavourEn;
+
+    @Column(name = "provenience_en")
+    private String provenienceEn;
 
     @Column(name = "sweetness")
     private Integer sweetness;
-
-    @Column(name = "provenience")
-    private String provenience;
 }

@@ -52,4 +52,8 @@ public class MenuItemService {
     public List<MenuItemDto> findMenuItemsByBakery(Long bakeryId) {
         return menuItemMapper.entityToDto(menuItemRepository.findByBakeryId(bakeryId));
     }
+
+    public List<MenuItemDto> findMenuItemsByCake(Long cakeId) {
+        return menuItemMapper.entityToDto(menuItemRepository.findByCakeId(cakeId));
+    }
 }

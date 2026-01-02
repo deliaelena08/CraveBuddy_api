@@ -70,4 +70,16 @@ public class MenuItemController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
+    @GetMapping("/cake/{id}")
+    public ResponseEntity<?> findMenuItemsByCake(@PathVariable Long id){
+        try {
+            return ResponseEntity.ok(menuItemService.findMenuItemsByCake(id));
+        }
+        catch (MenuItemNotFoundException e){
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
 }
