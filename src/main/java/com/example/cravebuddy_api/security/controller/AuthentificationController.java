@@ -49,7 +49,8 @@ public class AuthentificationController {
                 "token", jwt,
                 "id", user.getId(),
                 "username", user.getUsername(),
-                "language", user.getLanguage()
+                "language", user.getLanguage(),
+                "role",user.getRole()
         ));
     }
 

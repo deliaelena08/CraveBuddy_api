@@ -22,11 +22,8 @@ public class MenuItemService {
     public MenuItemDto addMenuItem(MenuItemDto menuItemDto) {
         MenuItem menuItem = menuItemMapper.dtoToEntity(menuItemDto);
         String errs = menuItemValidator.validate(menuItem);
-        if(errs.length()>0){
+        if(errs.length() > 0){
             throw new InvalidMenuItemException();
-        }
-        if(menuItemRepository.existsById(menuItem.getId())){
-            throw new MenuItemAlreadyExistException();
         }
         return menuItemMapper.entityToDto(menuItemRepository.save(menuItem));
     }

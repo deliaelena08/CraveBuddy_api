@@ -2,7 +2,6 @@ package com.example.cravebuddy_api.services;
 
 import com.example.cravebuddy_api.dtos.BakeryDto;
 import com.example.cravebuddy_api.entities.Bakery;
-import com.example.cravebuddy_api.exceptions.bakery.BakeryAlreadyExistException;
 import com.example.cravebuddy_api.exceptions.bakery.BakeryNotFoundException;
 import com.example.cravebuddy_api.exceptions.bakery.InvalidBakeryException;
 import com.example.cravebuddy_api.mappers.BakeryMapper;
@@ -22,13 +21,11 @@ public class BakeryService {
     public BakeryDto addBakery(BakeryDto bakeryDto) {
         Bakery bakery = bakeryMapper.dtoToEntity(bakeryDto);
         String errs = bakeryValidator.validate(bakery);
-        if(errs.length()>0){
+        if(errs.length() > 0){
             throw new InvalidBakeryException();
         }
-        if(bakeryRepository.existsById(bakery.getId())){
-            throw new BakeryAlreadyExistException();
-        }
-        return bakeryMapper.entityToDto(bakeryRepository.save(bakery));
+        Bakery savedBakery = bakeryRepository.save(bakery);
+        return bakeryMapper.entityToDto(savedBakery);
     }
 
     public void deleteBakery(Long bakeryId) {
@@ -47,5 +44,20 @@ public class BakeryService {
 
     public List<BakeryDto> findAllBakery() {
         return bakeryMapper.entityToDto(bakeryRepository.findAll());
+    }
+
+    public BakeryDto updateBakery(Long id,BakeryDto newBakeryDto) {
+        Bakery existingBakery = bakeryRepository.findById(id) .orElseThrow(() -> new BakeryNotFoundException());
+        existingBakery.setName(newBakeryDto.getName());
+        existingBakery.setAddress(newBakeryDto.getAddress());
+        existingBakery.setLatitude(newBakeryDto.getLatitude());
+        existingBakery.setLongitude(newBakeryDto.getLongitude());
+
+        String errs = bakeryValidator.validate(existingBakery);
+        if(errs.length() > 0){
+            throw new InvalidBakeryException();
+        }
+        return bakeryMapper.entityToDto(bakeryRepository.save(existingBakery));
+
     }
 }

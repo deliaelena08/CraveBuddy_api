@@ -21,13 +21,12 @@ public class CakeService {
 
     public CakeDto addCake(CakeDto cakeDto) {
         Cake cake = cakeMapper.dtoToEntity(cakeDto);
+
         String error = cakeValidator.validate(cake);
-        if(error.length()>0) {
+        if(error.length() > 0) {
             throw new InvalidBakeryException();
         }
-        if(cakeRepository.existsById(cake.getId())) {
-            throw new BakeryAlreadyExistException();
-        }
+
         return cakeMapper.entityToDto(cakeRepository.save(cake));
     }
 
@@ -39,10 +38,9 @@ public class CakeService {
     }
 
     public CakeDto findCakeById(Long cakeId) {
-        if(!cakeRepository.existsById(cakeId)) {
-            throw new BakeryNotFoundException();
-        }
-        return cakeMapper.entityToDto(cakeRepository.findById(cakeId).get());
+        return cakeRepository.findById(cakeId)
+                .map(cakeMapper::entityToDto)
+                .orElseThrow(BakeryNotFoundException::new);
     }
 
     public List<CakeDto> findAllCakes() {

@@ -1,6 +1,7 @@
 package com.example.cravebuddy_api.controllers;
 
 import com.example.cravebuddy_api.dtos.BakeryDto;
+import com.example.cravebuddy_api.dtos.UserDto;
 import com.example.cravebuddy_api.exceptions.bakery.BakeryAlreadyExistException;
 import com.example.cravebuddy_api.exceptions.bakery.BakeryNotFoundException;
 import com.example.cravebuddy_api.exceptions.bakery.InvalidBakeryException;
@@ -58,4 +59,9 @@ public class BakeryController {
                     .body(e.getMessage());
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<BakeryDto> updateBakery(@PathVariable Long id, @RequestBody BakeryDto bakeryDto) {
+        return ResponseEntity.ok(bakeryService.updateBakery(id,bakeryDto));
     }
+}
