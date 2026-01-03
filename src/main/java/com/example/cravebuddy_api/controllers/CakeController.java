@@ -4,6 +4,7 @@ import com.example.cravebuddy_api.dtos.CakeDto;
 import com.example.cravebuddy_api.exceptions.cake.CakeAlreadyExistException;
 import com.example.cravebuddy_api.exceptions.cake.CakeNotFoundException;
 import com.example.cravebuddy_api.exceptions.cake.InvalidCakeException;
+import com.example.cravebuddy_api.services.AISyncService;
 import com.example.cravebuddy_api.services.CakeService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +16,11 @@ import java.util.Map;
 @RequestMapping("/api/cakes")
 public class CakeController {
     private CakeService cakeService;
+    private final AISyncService aiSyncService;
 
-    public CakeController(CakeService cakeService) {
+    public CakeController(CakeService cakeService, AISyncService aiSyncService) {
         this.cakeService = cakeService;
+        this.aiSyncService = aiSyncService;
     }
 
     @GetMapping
@@ -27,22 +30,24 @@ public class CakeController {
 
     @PostMapping
     public ResponseEntity<?> saveCake(@RequestBody CakeDto cakeDto) {
-        try{
-            return ResponseEntity.ok(cakeService.addCake(cakeDto));
-        }catch(InvalidCakeException | CakeAlreadyExistException e){
+        try {
+            CakeDto savedCake = cakeService.addCake(cakeDto);
+            aiSyncService.syncCakesToAI();
+            return ResponseEntity.ok(savedCake);
+        } catch (InvalidCakeException | CakeAlreadyExistException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteCake(@PathVariable Long id){
+    public ResponseEntity<?> deleteCake(@PathVariable Long id) {
         try {
             cakeService.deleteCake(id);
+            aiSyncService.syncCakesToAI();
             return ResponseEntity.ok().build();
-        } catch(CakeNotFoundException e){
+        } catch (CakeNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
-
         }
     }
 
