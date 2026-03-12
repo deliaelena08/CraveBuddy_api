@@ -82,4 +82,15 @@ public class MenuItemController {
                     .body(Map.of("error", e.getMessage()));
         }
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateMenuItem(@PathVariable Long id, @RequestBody MenuItemDto menuItemDto) {
+        try {
+            return ResponseEntity.ok(menuItemService.updateMenuItem(id, menuItemDto));
+        } catch (MenuItemNotFoundException | InvalidMenuItemException e) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(Map.of("error", e.getMessage()));
+        }
+    }
 }

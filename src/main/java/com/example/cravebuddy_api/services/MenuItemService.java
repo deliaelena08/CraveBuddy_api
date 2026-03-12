@@ -53,4 +53,17 @@ public class MenuItemService {
     public List<MenuItemDto> findMenuItemsByCake(Long cakeId) {
         return menuItemMapper.entityToDto(menuItemRepository.findByCakeId(cakeId));
     }
+    public MenuItemDto updateMenuItem(Long id, MenuItemDto newMenuItemDto) {
+        MenuItem existingMenuItem = menuItemRepository.findById(id)
+                .orElseThrow(() -> new MenuItemNotFoundException());
+        existingMenuItem.setPrice(newMenuItemDto.getPrice());
+        existingMenuItem.setQuantity(newMenuItemDto.getQuantity());
+        String errs = menuItemValidator.validate(existingMenuItem);
+        if(errs.length() > 0){
+            throw new InvalidMenuItemException();
+        }
+
+        return menuItemMapper.entityToDto(menuItemRepository.save(existingMenuItem));
+    }
+
 }
