@@ -11,4 +11,5 @@ public class BakeryDto {
     private Float longitude;
     private Float latitude;
     private String address;
+    private Long ownerId;
 }

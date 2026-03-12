@@ -26,4 +26,8 @@ public class Bakery {
 
     @Column(name = "address")
     private String address;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id")
+    private User owner;
 }

@@ -2,10 +2,12 @@ package com.example.cravebuddy_api.services;
 
 import com.example.cravebuddy_api.dtos.BakeryDto;
 import com.example.cravebuddy_api.entities.Bakery;
+import com.example.cravebuddy_api.entities.User;
 import com.example.cravebuddy_api.exceptions.bakery.BakeryNotFoundException;
 import com.example.cravebuddy_api.exceptions.bakery.InvalidBakeryException;
 import com.example.cravebuddy_api.mappers.BakeryMapper;
 import com.example.cravebuddy_api.repos.BakeryRepository;
+import com.example.cravebuddy_api.repos.UserRepository;
 import com.example.cravebuddy_api.validators.BakeryValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,17 @@ public class BakeryService {
     private final BakeryRepository bakeryRepository;
     private final BakeryMapper bakeryMapper;
     private final BakeryValidator bakeryValidator;
+    private final UserRepository userRepository;
 
     public BakeryDto addBakery(BakeryDto bakeryDto) {
         Bakery bakery = bakeryMapper.dtoToEntity(bakeryDto);
+
+        if (bakeryDto.getOwnerId() != null) {
+            User owner = userRepository.findById(bakeryDto.getOwnerId())
+                    .orElseThrow(() -> new RuntimeException("Owner not found"));
+            bakery.setOwner(owner);
+        }
+
         String errs = bakeryValidator.validate(bakery);
         if(errs.length() > 0){
             throw new InvalidBakeryException();
