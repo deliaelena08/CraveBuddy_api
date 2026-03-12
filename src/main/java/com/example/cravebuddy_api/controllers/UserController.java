@@ -65,4 +65,16 @@ public class UserController {
         UserDto updated = userService.updateUser(id, userDto);
         return ResponseEntity.ok(updated);
     }
+
+    @PostMapping("/migrate-passwords")
+    public ResponseEntity<?> migratePasswords() {
+        try {
+            userService.hashExistingPlaintextPasswords();
+            return ResponseEntity.ok(Map.of("message", "All paswords has been hashed!"));
+        } catch (Exception e) {
+            return ResponseEntity
+                    .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Error while hashing: " + e.getMessage()));
+        }
+    }
 }

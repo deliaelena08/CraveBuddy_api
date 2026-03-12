@@ -8,13 +8,11 @@ import com.example.cravebuddy_api.exceptions.user.UserNotFoundException;
 import com.example.cravebuddy_api.mappers.UserMapper;
 import com.example.cravebuddy_api.repos.UserRepository;
 import com.example.cravebuddy_api.security.controller.LoginRequest;
-import com.example.cravebuddy_api.utils.UserRole;
 import com.example.cravebuddy_api.validators.UserValidator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,14 +23,17 @@ public class UserService {
     private final UserMapper userMapper;
     private final UserValidator userValidator;
     private final SimpMessagingTemplate simpMessagingTemplate;
+    private final PasswordEncoder passwordEncoder;
 
     public UserDto login(LoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
             throw new LoginFailedException("There is no user with the email: " + request.getUsername());
         }
-        if (!request.getPassword().equals(user.getPassword())) {
-            throw new LoginFailedException("Wrong password");
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
+            if (!request.getPassword().equals(user.getPassword())) {
+                throw new LoginFailedException("Wrong password");
+            }
         }
 
         User saved = userRepository.save(user);
@@ -50,6 +51,8 @@ public class UserService {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new UserAlreadyExistException();
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
         User saved = userRepository.save(user);
 
         Map<String, Object> message = Map.of(
@@ -59,6 +62,17 @@ public class UserService {
         simpMessagingTemplate.convertAndSend("/ws/users", message);
 
         return userMapper.entityToDto(saved);
+    }
+
+    public void hashExistingPlaintextPasswords() {
+        List<User> allUsers = userRepository.findAll();
+        for (User user : allUsers) {
+            String currentPassword = user.getPassword();
+            if (currentPassword != null && !currentPassword.startsWith("$2a$")) {
+                user.setPassword(passwordEncoder.encode(currentPassword));
+                userRepository.save(user);
+            }
+        }
     }
 
     public void deleteUser(Long id){
