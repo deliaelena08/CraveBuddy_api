@@ -6,6 +6,7 @@ import com.example.cravebuddy_api.exceptions.bakery.BakeryAlreadyExistException;
 import com.example.cravebuddy_api.exceptions.bakery.BakeryNotFoundException;
 import com.example.cravebuddy_api.exceptions.bakery.InvalidBakeryException;
 import com.example.cravebuddy_api.services.BakeryService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -38,7 +39,7 @@ public class BakeryController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> saveBakery(@RequestBody BakeryDto bakeryDto){
+    public ResponseEntity<?> saveBakery(@Valid @RequestBody BakeryDto bakeryDto){
         try{
             return ResponseEntity.ok(bakeryService.addBakery(bakeryDto));
         }catch(InvalidBakeryException | BakeryAlreadyExistException e){
@@ -61,7 +62,7 @@ public class BakeryController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<BakeryDto> updateBakery(@PathVariable Long id, @RequestBody BakeryDto bakeryDto) {
+    public ResponseEntity<BakeryDto> updateBakery(@PathVariable Long id, @Valid @RequestBody BakeryDto bakeryDto) {
         return ResponseEntity.ok(bakeryService.updateBakery(id,bakeryDto));
     }
 }

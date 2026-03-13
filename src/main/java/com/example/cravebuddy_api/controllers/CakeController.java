@@ -6,6 +6,7 @@ import com.example.cravebuddy_api.exceptions.cake.CakeNotFoundException;
 import com.example.cravebuddy_api.exceptions.cake.InvalidCakeException;
 import com.example.cravebuddy_api.services.AISyncService;
 import com.example.cravebuddy_api.services.CakeService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class CakeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveCake(@RequestBody CakeDto cakeDto) {
+    public ResponseEntity<?> saveCake(@Valid @RequestBody CakeDto cakeDto) {
         try {
             CakeDto savedCake = cakeService.addCake(cakeDto);
             aiSyncService.syncCakesToAI();
